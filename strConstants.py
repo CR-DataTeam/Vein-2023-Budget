@@ -58,6 +58,7 @@ adjustPaddingAndFont = """
                     height: 0rem;   
                 }
                .css-uc76bn {
+                    padding-top: 4rem;
                     font-size: 0.75rem;
                 }
                .css-13eon2a {
