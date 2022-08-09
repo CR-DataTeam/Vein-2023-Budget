@@ -48,6 +48,12 @@ adjustPaddingAndFont = """
                     padding-bottom: 0rem;
                     padding-left: 0rem;
                 }
+               .css-97ja1j {
+                    height: 0rem;
+                }
+               .css-1esuaex {
+                    gap: 0.5rem;
+                }
                .css-1avcm0n {
                     height: 0rem;   
                 }
