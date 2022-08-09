@@ -9,11 +9,11 @@ from googleapiclient.discovery import build
 import strConstants as sc
 
 FACNAME = 'Summary'
-FACBEG  =  306
-FACEND  = 321
+FACBEG  =  14
+FACEND  = 19
 
 st.set_page_config(
-     page_title="Mamm 2023 Budget",
+     page_title="Vein 2023 Budget",
      layout="wide"
      )
 padding = 0
@@ -36,11 +36,7 @@ js = JsCode(sc.getCodeSnippet('jsCodeStr'))
 #### set-up basis for iteration
 ###############################################################################
 
-# facilityList = ['Ballantyne', 'Blakeney', 'Huntersville', 'Matthews', 'MCP', 
-#                 'MMP', 'Mobile', 'Monroe', 'Mooresville', 'Pineville', 
-#                 'Prosperity', 'Randolph', 'Rock Hill', 'Rosedale', 'Southpark', 
-#                 'Steele Creek', 'Union West', 'University', 'xDeNovo'
-# ]
+XLfacilityList = ['Huntersville', 'Southpark']
 
 colSortList = [
       'Jan19', 'Feb19', 'Mar19', 'Apr19', 'May19', 'Jun19', 'Jul19', 'Aug19', 'Sep19', 'Oct19', 'Nov19', 'Dec19',
@@ -117,11 +113,13 @@ def fetchData():
     #### tbd
     ###############################################################################
     
+    dfall = dfpiv
     dfit = ledger[f'{FACNAME}_dfload']
-    return dfit
+    return dfit, dfall
 
-
-dfit = fetchData()    
+dfall = fetchData()[1]
+dfit = fetchData()[0]    
+  
 
 
 #for i in range(len(facilityList)):
@@ -378,7 +376,37 @@ else { return (100*((
 
 grid_response = displayTable(dfit)
 
-    
+del dfall['unid']
+del dfall['SortInt']
+del dfall['HistoricalVolumeFlag']
+del dfall['ExamCategory']
+
+#import xlsxwriter
+from io import BytesIO
+
+@st.cache
+def convert_df():
+    output = BytesIO()
+    writer = pd.ExcelWriter(output, 
+                            engine='xlsxwriter', 
+                            engine_kwargs={'options':{'strings_to_numbers':True}})# {'in_memory': True}})
+    for i in range(len(XLfacilityList)):
+        dfall[dfall['FacilityName']==XLfacilityList[i]].to_excel(writer,
+                                                                 sheet_name=XLfacilityList[i],
+                                                                 index=False)
+        # dlBallantyne.to_excel(writer, sheet_name='Ballantyne', index=False)
+        # dlBlakeney.to_excel(writer, sheet_name='Blakeney', index=False)
+    writer.save()
+    return output.getvalue() 
+
+
+st.download_button(
+    label="Download Excel workbook",
+    data=convert_df(),
+    file_name="Vein2023Budget_export.xlsx",
+    mime="application/vnd.ms-excel"
+)
+        
     
 
 
