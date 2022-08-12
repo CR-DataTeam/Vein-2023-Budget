@@ -62,7 +62,7 @@ def generatePage(facility_name, facility_startrow, facility_endrow):
     
     def displayTable(df: pd.DataFrame) -> AgGrid:
         setGridOptions = colDefDictionary.facilityBuild()
-        naming = facilityList[i].replace(' ','')
+        naming = FACNAME.replace(' ','')
         return AgGrid(
             data=dfit,
             editable=True,
