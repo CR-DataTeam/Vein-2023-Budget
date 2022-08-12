@@ -1,4 +1,4 @@
 
-import MammFunctions as mf
+import VeinFunctions as vf
 
-mf.generatePage('Huntersville', 2,7)
+vf.generatePage('Huntersville', 2,7)

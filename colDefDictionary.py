@@ -1,140 +1,7 @@
+# -*- coding: utf-8 -*-
 
-def generatePage(facility_name, facility_startrow, facility_endrow):
-    import pandas as pd
-    import streamlit as st
-    from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode, JsCode
-    import datetime
-    from google.oauth2 import service_account
-    from googleapiclient.discovery import build
-    import strConstants as sc
-    
-    FACNAME = facility_name
-    FACBEG  =  facility_startrow
-    FACEND  = facility_endrow
-
-    st.set_page_config(
-         page_title=FACNAME,
-         layout="wide"
-         )
-    padding = 0
-    st.markdown(f""" <style>
-        .reportview-container .main .block-container{{
-            padding-top: {padding}rem;
-            padding-right: {padding}rem;
-            padding-left: {padding}rem;
-            padding-bottom: {padding}rem;
-        }} </style> """, unsafe_allow_html=True)
-
-
-    st.markdown(sc.getCodeSnippet('sidebarWidth'), unsafe_allow_html=True)
-    st.markdown(sc.getCodeSnippet('hideStreamlitStyle'), unsafe_allow_html=True)
-    st.markdown(sc.getCodeSnippet('adjustPaddingAndFont'), unsafe_allow_html=True)
-    js = JsCode(sc.getCodeSnippet('jsCodeStr'))
-
-
-    ###############################################################################
-    #### set-up basis for iteration
-    ###############################################################################
-
-    # facilityList = ['Ballantyne', 'Blakeney', 'Huntersville', 'Matthews', 'MCP', 
-    #                 'MMP', 'Mobile', 'Monroe', 'Mooresville', 'Pineville', 
-    #                 'Prosperity', 'Randolph', 'Rock Hill', 'Rosedale', 'Southpark', 
-    #                 'Steele Creek', 'Union West', 'University', 'xDeNovo'
-    # ]
-
-    colSortList = [
-          'Jan19', 'Feb19', 'Mar19', 'Apr19', 'May19', 'Jun19', 'Jul19', 'Aug19', 'Sep19', 'Oct19', 'Nov19', 'Dec19',
-          'Jan20', 'Feb20', 'Mar20', 'Apr20', 'May20', 'Jun20', 'Jul20', 'Aug20', 'Sep20', 'Oct20', 'Nov20', 'Dec20',
-          'Jan21', 'Feb21', 'Mar21', 'Apr21', 'May21', 'Jun21', 'Jul21', 'Aug21', 'Sep21', 'Oct21', 'Nov21', 'Dec21',
-          'Jan22', 'Feb22', 'Mar22', 'Apr22', 'May22', 'Jun22', 'Jul22', 'Aug22', 'Sep22', 'Oct22', 'Nov22', 'Dec22',
-          'Jan23', 'Feb23', 'Mar23', 'Apr23', 'May23', 'Jun23', 'Jul23', 'Aug23', 'Sep23', 'Oct23', 'Nov23', 'Dec23'
-          ]
-
-    col19=colSortList[:12]
-    col20=colSortList[12:24]
-    col21=colSortList[24:36]
-    col22=colSortList[36:48]
-    col23=colSortList[48:60]
-
-    gr19 = {}
-    for colm in range(len(col19)):
-        gr19[col19[colm]] = '2019'
-
-
-    editableMonths = colSortList[43:60]
-    lockedMonths = colSortList[0:43]
-
-    facilityList=[FACNAME]
-
-    creds = service_account.Credentials.from_service_account_file(
-        'serviceacc.json',
-        scopes=['https://www.googleapis.com/auth/spreadsheets'],
-        )
-    service = build('sheets', 'v4', credentials=creds, cache_discovery=False)
-
-    spreadsheetId = '1-zYgl-7ffj8cV2N80aICDHHKHfqyQX5rE3HXDcgSsfc'
-
-    def fetchData():
-        creds = service_account.Credentials.from_service_account_file(
-            'serviceacc.json',
-            scopes=['https://www.googleapis.com/auth/spreadsheets'],
-            )
-        service = build('sheets', 'v4', credentials=creds, cache_discovery=False)
-        
-        spreadsheetId = '1-zYgl-7ffj8cV2N80aICDHHKHfqyQX5rE3HXDcgSsfc'
-        rangeName = 'VeinCurrentFacilityValues!A1:BQ19'
-        result = service.spreadsheets().values().get(
-            spreadsheetId=spreadsheetId, range=rangeName).execute()
-        #values = result.get('values', [])
-        
-        df = pd.DataFrame(result['values'])
-        df.columns = df.iloc[0]
-        # df['index'] = df['unid']
-        dfpiv = df[1:]
-        
-        
-        
-        
-        ###############################################################################
-        #### set-up current/fresh state tables for each facility
-        ###############################################################################
-        
-        ledger = {}
-        
-        ledger[f'{FACNAME}_dfload'] = dfpiv[dfpiv['FacilityName']==FACNAME]
-        ledger[f'{FACNAME}_startrow'] = FACBEG
-        ledger[f'{FACNAME}_endrow'] = FACEND
-        
-        
-        # for i in range(len(facilityList)):
-        #     ledger[f'{facilityList[i]}_dfload'] = dfpiv[dfpiv['FacilityName']==facilityList[i]]
-        #     ledger[f'{facilityList[i]}_startRow'] =  2 + i*16
-        #     ledger[f'{facilityList[i]}_endRow']   = 17 + i*16   
-        #     naming = facilityList[i].replace(' ','')
-                
-        
-        ###############################################################################
-        #### tbd
-        ###############################################################################
-        
-        dfit = ledger[f'{FACNAME}_dfload']
-        return dfit
-    dfit = fetchData()
-    if 'hide19' not in st.session_state:
-        st.session_state.hide19 = False
-        
-        
-    resFalse = {'resizable': False}
-    hide19a = False
-
-    auditUser = dfit['AuditUser'].max()
-
-
-    #for i in range(len(facilityList)):
-    def displayTable(df: pd.DataFrame) -> AgGrid:
-        i = 0
-        
-        testbuild = {
+def facilityBuild():
+    return {
         # enable Master / Detail
         "enableRangeSelection": True,
         "pagination": False,
@@ -266,21 +133,23 @@ def generatePage(facility_name, facility_startrow, facility_endrow):
                  'children': [
                      {'field': 'growth1920', 'headerName':'19A->20A', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':100,
                       'valueGetter':"""
-    if ( 
-    isNaN(
-    ((
-      Number(data.Jan20)+Number(data.Feb20)+Number(data.Mar20)+Number(data.Apr20)+Number(data.May20)+Number(data.Jun20)+Number(data.Jul20)+Number(data.Aug20)+Number(data.Sep20)+Number(data.Oct20)+Number(data.Nov20)+Number(data.Dec20)
-      )/(
-      Number(data.Jan19)+Number(data.Feb19)+Number(data.Mar19)+Number(data.Apr19)+Number(data.May19)+Number(data.Jun19)+Number(data.Jul19)+Number(data.Aug19)+Number(data.Sep19)+Number(data.Oct19)+Number(data.Nov19)+Number(data.Dec19)
-                                                                                                                                                                                                                                            )-1).toFixed(2)
-    ) 
-    ) { return ''; } 
-    else { return (100*((
-        Number(data.Jan20)+Number(data.Feb20)+Number(data.Mar20)+Number(data.Apr20)+Number(data.May20)+Number(data.Jun20)+Number(data.Jul20)+Number(data.Aug20)+Number(data.Sep20)+Number(data.Oct20)+Number(data.Nov20)+Number(data.Dec20)
-        )/(
-           Number(data.Jan19)+Number(data.Feb19)+Number(data.Mar19)+Number(data.Apr19)+Number(data.May19)+Number(data.Jun19)+Number(data.Jul19)+Number(data.Aug19)+Number(data.Sep19)+Number(data.Oct19)+Number(data.Nov19)+Number(data.Dec19)
-    )-1)).toFixed(1)+'%';}""" },
-                     {'field': 'growth2021', 'headerName':'20A->21A',  'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':100,
+    if ( isNaN(
+      Number(data.Jan19)+Number(data.Feb19)+Number(data.Mar19)+Number(data.Apr19)+
+      Number(data.May19)+Number(data.Jun19)+Number(data.Jul19)+Number(data.Aug19)+
+      Number(data.Sep19)+Number(data.Oct19)+Number(data.Nov19)+Number(data.Dec19)
+      ) ) { return ''; } 
+    else { return (
+      100*(
+       (Number(data.Jan20)+Number(data.Feb20)+Number(data.Mar20)+Number(data.Apr20)+
+        Number(data.May20)+Number(data.Jun20)+Number(data.Jul20)+Number(data.Aug20)+
+        Number(data.Sep20)+Number(data.Oct20)+Number(data.Nov20)+Number(data.Dec20))
+           /
+       (Number(data.Jan19)+Number(data.Feb19)+Number(data.Mar19)+Number(data.Apr19)+
+        Number(data.May19)+Number(data.Jun19)+Number(data.Jul19)+Number(data.Aug19)+
+        Number(data.Sep19)+Number(data.Oct19)+Number(data.Nov19)+Number(data.Dec19))
+           -1)).toFixed(1)+'%';}""" },
+                     
+                    {'field': 'growth2021', 'headerName':'20A->21A',  'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':100,
                      'valueGetter':"""
     if ( 
     isNaN(
@@ -365,81 +234,3 @@ def generatePage(facility_name, facility_startrow, facility_endrow):
         
         "onCellValueChanged":"--x_x--0_0-- function(e) { let api = e.api; let rowIndex = e.rowIndex; let col = e.column.colId; let rowNode = api.getDisplayedRowAtIndex(rowIndex); api.flashCells({ rowNodes: [rowNode], columns: [col], flashDelay: 10000000000 }); }; --x_x--0_0--"
         }
-
-        naming = facilityList[i].replace(' ','')
-        return AgGrid(
-            data=dfit,
-            editable=True,
-            gridOptions=testbuild,#gb.build(),
-            data_return_mode=DataReturnMode.AS_INPUT,
-            update_mode=GridUpdateMode.VALUE_CHANGED|GridUpdateMode.FILTERING_CHANGED,
-            fit_columns_on_grid_load=True,
-            theme='light', 
-            height=525, 
-            allow_unsafe_jscode=True,
-            enable_enterprise_modules=True,
-            key=f'aggrid_{naming}_key',
-            )      
-
-
-    grid_response = displayTable(dfit)
-    dfgo = grid_response['data']
-    dfgo['AuditUser'] = auditUser
-    if dfit.equals(dfgo) == False:
-        dfit = dfgo
-        goog = dfgo.values.tolist()
-        body = { 'values': goog }
-        outputStart = FACBEG
-        outputEnd   = FACEND
-        outputRange = f'VeinCurrentFacilityValues!A{outputStart}:BQ{outputEnd}'
-        outputResult = service.spreadsheets().values().update(
-                    spreadsheetId=spreadsheetId, range=outputRange,
-                    valueInputOption='USER_ENTERED', body=body).execute()
-
-    rangeNameAudit = 'VeinAuditLog!A:BQ'
-    result = service.spreadsheets().values().get(
-        spreadsheetId=spreadsheetId, range=rangeNameAudit).execute()
-    #values = result.get('values', [])
-    
-    dfa = pd.DataFrame(result['values'])
-    dfa.columns = dfa.iloc[0]
-    # df['index'] = df['unid']
-    dfpiva = dfa[1:]
-    
-    latestAuditDate = dfpiva[dfpiva['FacilityName']==FACNAME]['AuditDateTime'].max()
-    latestAuditUser = dfpiva[dfpiva['AuditDateTime']==latestAuditDate]['AuditUser'].max()
-        
-    col1, col2, col3, col4 = st.columns([1,1,1,1])
-    with col1:
-        st.text('Latest Audit User: ' + str(latestAuditUser))
-        st.text('Latest Audit Date: ' + str(latestAuditDate))
-        
-    with col3:
-        auditUser = st.text_input('Enter name: (required)', value=auditUser,)
-    with col4:
-        st.text('')
-        st.text('')
-        submissionButton = st.button("Submit Budget Entry")  
-
-    if submissionButton:
-        #runTables(dfit)
-        auditTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        dfgo['AuditUser'] = auditUser
-        dfgo['AuditDateTime'] = auditTime
-        goog = dfgo.values.tolist()
-        body = { 'values': goog }
-        outputStart = FACBEG
-        outputEnd   = FACEND
-        outputRange = f'VeinCurrentFacilityValues!A{outputStart}:BQ{outputEnd}'
-        outputResult = service.spreadsheets().values().update(
-                    spreadsheetId=spreadsheetId, range=outputRange,
-                    valueInputOption='USER_ENTERED', body=body).execute()
-        appendRange = 'VeinAuditLog!A:BQ'
-        appendResult = service.spreadsheets().values().append(
-                    spreadsheetId=spreadsheetId, range=appendRange,
-                    valueInputOption='USER_ENTERED', body=body).execute()
-        st.balloons()
-        st.experimental_rerun()
-
-
-     

@@ -1,4 +1,4 @@
 
-import MammFunctions as mf
+import VeinFunctions as vf
 
-mf.generatePage('Southpark', 8,13)
+vf.generatePage('Southpark', 8,13)
