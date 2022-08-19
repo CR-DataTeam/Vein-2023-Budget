@@ -392,8 +392,12 @@ def convert_df():
                                             ).execute() 
     exp_pre = pd.DataFrame(result['values'])
     exp_pre.columns = exp_pre.iloc[0]
-    # df['index'] = df['unid']
     exportdf = exp_pre[1:]
+    del exportdf['unid']
+    del exportdf['SortInt']
+    del exportdf['HistoricalVolumeFlag']
+    del exportdf['ExamCategory']
+    
     output = BytesIO()
     writer = pd.ExcelWriter(output, 
                             engine='xlsxwriter', 
