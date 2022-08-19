@@ -82,7 +82,8 @@ with colB:
     if SelectedFacility != '':
         facdf = dfpiva[dfpiva['FacilityName']==SelectedFacility]
         facdf['AuditDateAndUser'] = facdf['AuditDateTime'].astype(str) + ' - ' + facdf['AuditUser'].astype(str)
-        AuditDateAndUserList = facdf['AuditDateAndUser'].unique()
+        AuditDateAndUserList = facdf.sort_values('AuditDateAndUser', ascending=False)
+        AuditDateAndUserList = AuditDateAndUserList['AuditDateAndUser'].unique()
         SelectedDateAndUser = st.selectbox('Select Audit Entry', AuditDateAndUserList)
 
 latestAuditDate = dfpiva[dfpiva['FacilityName']==FACNAME]['AuditDateTime'].max()
