@@ -71,13 +71,13 @@ service = build('sheets', 'v4', credentials=creds, cache_discovery=False)
 spreadsheetId = '1-zYgl-7ffj8cV2N80aICDHHKHfqyQX5rE3HXDcgSsfc'
 
 def fetchData():
-    creds = service_account.Credentials.from_service_account_file(
-        'serviceacc.json',
-        scopes=['https://www.googleapis.com/auth/spreadsheets'],
-        )
-    service = build('sheets', 'v4', credentials=creds, cache_discovery=False)
+    # creds = service_account.Credentials.from_service_account_file(
+    #     'serviceacc.json',
+    #     scopes=['https://www.googleapis.com/auth/spreadsheets'],
+    #     )
+    # service = build('sheets', 'v4', credentials=creds, cache_discovery=False)
     
-    spreadsheetId = '1-zYgl-7ffj8cV2N80aICDHHKHfqyQX5rE3HXDcgSsfc'
+    # spreadsheetId = '1-zYgl-7ffj8cV2N80aICDHHKHfqyQX5rE3HXDcgSsfc'
     rangeName = 'VeinCurrentFacilityValues!A1:BN19'
     result = service.spreadsheets().values().get(
         spreadsheetId=spreadsheetId, range=rangeName).execute()
@@ -386,12 +386,20 @@ from io import BytesIO
 
 @st.cache
 def convert_df():
+    result = service.spreadsheets().values().get(
+                                            spreadsheetId=spreadsheetId, 
+                                            range='VeinCurrentFacilityValues!A1:BQ19'
+                                            ).execute() 
+    exp_pre = pd.DataFrame(result['values'])
+    exp_pre.columns = exp_pre.iloc[0]
+    # df['index'] = df['unid']
+    exportdf = exp_pre[1:]
     output = BytesIO()
     writer = pd.ExcelWriter(output, 
                             engine='xlsxwriter', 
                             engine_kwargs={'options':{'strings_to_numbers':True}})# {'in_memory': True}})
     for i in range(len(XLfacilityList)):
-        dfall[dfall['FacilityName']==XLfacilityList[i]].to_excel(writer,
+        exportdf[exportdf['FacilityName']==XLfacilityList[i]].to_excel(writer,
                                                                  sheet_name=XLfacilityList[i],
                                                                  index=False)
         # dlBallantyne.to_excel(writer, sheet_name='Ballantyne', index=False)
