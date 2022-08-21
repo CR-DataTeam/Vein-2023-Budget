@@ -78,7 +78,7 @@ def fetchData():
     # service = build('sheets', 'v4', credentials=creds, cache_discovery=False)
     
     # spreadsheetId = '1-zYgl-7ffj8cV2N80aICDHHKHfqyQX5rE3HXDcgSsfc'
-    rangeName = 'VeinCurrentFacilityValues!A1:BN19'
+    rangeName = 'VeinCurrentFacilityValues!A1:BQ19'
     result = service.spreadsheets().values().get(
         spreadsheetId=spreadsheetId, range=rangeName).execute()
     #values = result.get('values', [])
@@ -387,27 +387,12 @@ from io import BytesIO
 
 @st.cache
 def convert_df():
-    # range='VeinCurrentFacilityValues!A1:BQ19'
-    # result2 = service.spreadsheets().values().get(
-    #                                         spreadsheetId=spreadsheetId, 
-    #                                         range='CurrentFacilityValues!A1:BQ321'
-    #                                         ).execute() 
-    # exp_pre = pd.DataFrame(result2['values'])
-    # exp_pre.columns = exp_pre.iloc[0]
-    # exportdf = exp_pre[1:]
-    dfgo = grid_response['data']
-    exportdf = dfgo
-    del exportdf['unid']
-    del exportdf['SortInt']
-    del exportdf['HistoricalVolumeFlag']
-    del exportdf['ExamCategory']
-    
     output = BytesIO()
     writer = pd.ExcelWriter(output, 
                             engine='xlsxwriter', 
                             engine_kwargs={'options':{'strings_to_numbers':True, 'in_memory': True}})
     for i in range(len(XLfacilityList)):
-        exportdf[exportdf['FacilityName']==XLfacilityList[i]].to_excel(writer,
+        dfall[dfall['FacilityName']==XLfacilityList[i]].to_excel(writer,
                                                                  sheet_name=XLfacilityList[i],
                                                                  index=False)
         # dlBallantyne.to_excel(writer, sheet_name='Ballantyne', index=False)
