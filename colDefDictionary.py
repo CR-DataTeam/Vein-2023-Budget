@@ -209,7 +209,7 @@ def facilityBuild():
     ) 
     ) { return ''; } 
     else { return (100*((
-        (Number(data.Jan21)+Number(data.Feb21)+Number(data.Mar21)+Number(data.Apr21)+Number(data.May21)+Number(data.Jun21)+Number(data.Jul21)+Number(data.Aug21)+Number(data.Sep21)+Number(data.Oct21)+Number(data.Nov21)+Number(data.Dec21)
+        (Number(data.Jan22)+Number(data.Feb22)+Number(data.Mar22)+Number(data.Apr22)+Number(data.May22)+Number(data.Jun22)+Number(data.Jul22)+Number(data.Aug22)+Number(data.Sep22)+Number(data.Oct22)+Number(data.Nov22)+Number(data.Dec22)
         )/(
            Number(data.Jan19)+Number(data.Feb19)+Number(data.Mar19)+Number(data.Apr19)+Number(data.May19)+Number(data.Jun19)+Number(data.Jul19)+Number(data.Aug19)+Number(data.Sep19)+Number(data.Oct19)+Number(data.Nov19)+Number(data.Dec19)
     ))**(1/3)-1)).toFixed(1)+'%';}"""},
