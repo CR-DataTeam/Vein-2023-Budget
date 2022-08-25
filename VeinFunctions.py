@@ -112,8 +112,10 @@ def generatePage(facility_name, facility_startrow, facility_endrow):
     #### Populating the various bottom sections
     col1, col2, col3, col4 = st.columns([1,1,1,1])
     with col1:
-        st.text('Latest Audit User: ' + str(latestAuditUser))
-        st.text('Latest Audit Date: ' + str(latestAuditDate))
+        latestAuditUserText = 'Latest Audit User: ' + str(latestAuditUser)
+        latestAuditDateText = 'Latest Audit Date: ' + str(latestAuditDate)
+        st.markdown(f'{latestAuditUserText}')
+        st.markdown(f'{latestAuditDateText}')
     with col3:
         auditUser = st.text_input('Enter name: (required)', value='',)
     with col4:
