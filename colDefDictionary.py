@@ -220,7 +220,7 @@ def facilityBuild():
             },
             
            
-           {'field': 'AuditComment', 'width':600, 'editable':True, 'suppressSizeToFit':True},
+           {'field': 'AuditComment', 'width':1000, 'editable':True, 'suppressSizeToFit':True},
             
             
         ],
