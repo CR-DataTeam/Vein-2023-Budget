@@ -348,7 +348,7 @@ else { return (100*((
         
     ],
     "defaultColDef": {
-        "minColumnWidth": 750,
+        "minColumnWidth": 75,
         'filterable': False,
         'sortable': False,
         'editable': True,
