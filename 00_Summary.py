@@ -400,16 +400,21 @@ def convert_df():
     writer.save()
     return output.getvalue() 
 
-
-st.download_button(
-    label="Download Excel workbook",
-    data=convert_df(),
-    file_name="Vein2023Budget_export.xlsx",
-    mime="application/vnd.ms-excel"
-)
         
     
-
+#### Populating the various bottom sections
+col1, col2, col3, col4 = st.columns([1,1,1,1])
+with col1:
+    st.download_button(
+        label="Download Excel workbook",
+        data=convert_df(),
+        file_name="Vein2023Budget_export.xlsx",
+        mime="application/vnd.ms-excel"
+    )
+with col2:
+    st.markdown('Jan19-Aug22: Actuals')
+    st.markdown('Sep22-Dec22: Forecast')
+    st.markdown('Jan23-Dec23: Budget')
 
     
     
