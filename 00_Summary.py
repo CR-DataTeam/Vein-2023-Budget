@@ -382,7 +382,7 @@ del dfall['SortInt']
 del dfall['HistoricalVolumeFlag']
 del dfall['ExamCategory']
 
-dfall = dfall.style.set_properties(**{'background-color': 'lightblue'}, subset=colSortList[0:45])
+#dfall = dfall.style.set_properties(**{'background-color': 'lightblue'}, subset=colSortList[0:45])
 
 #import xlsxwriter
 from io import BytesIO
