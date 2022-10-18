@@ -382,7 +382,7 @@ del dfall['SortInt']
 del dfall['HistoricalVolumeFlag']
 del dfall['ExamCategory']
 
-dfall = dfall.style.set_properties(**{'background-color': 'lightblue'}, subset=['Jan19'])
+#dfall.style.apply(, subset=['Jan19'])
 
 #import xlsxwriter
 from io import BytesIO
@@ -394,7 +394,7 @@ def convert_df():
                             engine='xlsxwriter', 
                             engine_kwargs={'options':{'strings_to_numbers':True, 'in_memory': True}})
     for i in range(len(XLfacilityList)):
-        dfall[dfall['FacilityName']==XLfacilityList[i]].to_excel(writer,
+        dfall[dfall['FacilityName']==XLfacilityList[i]].style.apply(**{'background-color':'lightblue'}, subset=['Jan19']).to_excel(writer,
                                                                  sheet_name=XLfacilityList[i],
                                                                  index=False)
         # dlBallantyne.to_excel(writer, sheet_name='Ballantyne', index=False)
