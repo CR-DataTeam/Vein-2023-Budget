@@ -398,7 +398,7 @@ def convert_df():
                             engine='xlsxwriter', 
                             engine_kwargs={'options':{'strings_to_numbers':True, 'in_memory': True}})
     for i in range(len(XLfacilityList)):
-        dfall[dfall['FacilityName']==XLfacilityList[i]].to_excel(writer, #.style.apply({'background-color:lightblue'}, subset=['Jan19'])
+        dfall[dfall['FacilityName']==XLfacilityList[i]].style.apply(f, axis=0, subset=['Jan19']).to_excel(writer, #.style.apply({'background-color:lightblue'}, subset=['Jan19'])
                                                                  sheet_name=XLfacilityList[i],
                                                                  index=False)
         # dlBallantyne.to_excel(writer, sheet_name='Ballantyne', index=False)
