@@ -57,8 +57,8 @@ for colm in range(len(col19)):
     gr19[col19[colm]] = '2019'
 
 
-editableMonths = colSortList[43:60]
-lockedMonths = colSortList[0:43]
+editableMonths = colSortList[45:60]
+lockedMonths = colSortList[0:45]
 
 facilityList=[FACNAME]
 
@@ -382,6 +382,8 @@ del dfall['SortInt']
 del dfall['HistoricalVolumeFlag']
 del dfall['ExamCategory']
 
+dfall.style.set_properties(**{'background-color': 'lightblue'}, subset=colSortList[0:45])
+
 #import xlsxwriter
 from io import BytesIO
 
@@ -411,10 +413,10 @@ with col1:
         file_name="Vein2023Budget_export.xlsx",
         mime="application/vnd.ms-excel"
     )
-with col2:
-    st.markdown('Jan19-Aug22: Actuals')
-    st.markdown('Sep22-Dec22: Forecast')
-    st.markdown('Jan23-Dec23: Budget')
+#with col2:
+#    st.markdown('Jan19-Aug22: Actuals')
+#    st.markdown('Sep22-Dec22: Forecast')
+#    st.markdown('Jan23-Dec23: Budget')
 
     
     
