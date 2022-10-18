@@ -383,6 +383,10 @@ del dfall['HistoricalVolumeFlag']
 del dfall['ExamCategory']
 
 #dfall.style.apply(, subset=['Jan19'])
+def f(dat, c='lightblue'):
+    return [f'background-color: {c}' for i in dat]
+
+dfall.style.apply(f, axis=0, subset=['Jan19'])
 
 #import xlsxwriter
 from io import BytesIO
