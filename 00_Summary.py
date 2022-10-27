@@ -9,7 +9,7 @@ from googleapiclient.discovery import build
 import strConstants as sc
 
 FACNAME = 'Summary'
-FACBEG  =  14
+FACBEG  = 14
 FACEND  = 19
 
 st.set_page_config(
@@ -52,14 +52,8 @@ col21=colSortList[24:36]
 col22=colSortList[36:48]
 col23=colSortList[48:60]
 
-gr19 = {}
-for colm in range(len(col19)):
-    gr19[col19[colm]] = '2019'
-
-
 editableMonths = colSortList[45:60]
-lockedMonths = colSortList[0:45]
-
+lockedMonths   = colSortList[0:45]
 facilityList=[FACNAME]
 
 creds = service_account.Credentials.from_service_account_file(
@@ -67,28 +61,15 @@ creds = service_account.Credentials.from_service_account_file(
     scopes=['https://www.googleapis.com/auth/spreadsheets'],
     )
 service = build('sheets', 'v4', credentials=creds, cache_discovery=False)
-
 spreadsheetId = '1-zYgl-7ffj8cV2N80aICDHHKHfqyQX5rE3HXDcgSsfc'
 
 def fetchData():
-    # creds = service_account.Credentials.from_service_account_file(
-    #     'serviceacc.json',
-    #     scopes=['https://www.googleapis.com/auth/spreadsheets'],
-    #     )
-    # service = build('sheets', 'v4', credentials=creds, cache_discovery=False)
-    
-    # spreadsheetId = '1-zYgl-7ffj8cV2N80aICDHHKHfqyQX5rE3HXDcgSsfc'
     rangeName = 'VeinCurrentFacilityValues!A1:BQ19'
     result = service.spreadsheets().values().get(
         spreadsheetId=spreadsheetId, range=rangeName).execute()
-    #values = result.get('values', [])
-    
     df = pd.DataFrame(result['values'])
     df.columns = df.iloc[0]
-    # df['index'] = df['unid']
     dfpiv = df[1:]
-    
-    
     
     
     ###############################################################################
@@ -100,14 +81,8 @@ def fetchData():
     ledger[f'{FACNAME}_dfload'] = dfpiv[dfpiv['FacilityName']==FACNAME]
     ledger[f'{FACNAME}_startrow'] = FACBEG
     ledger[f'{FACNAME}_endrow'] = FACEND
-    
-    
-    # for i in range(len(facilityList)):
-    #     ledger[f'{facilityList[i]}_dfload'] = dfpiv[dfpiv['FacilityName']==facilityList[i]]
-    #     ledger[f'{facilityList[i]}_startRow'] =  2 + i*16
-    #     ledger[f'{facilityList[i]}_endRow']   = 17 + i*16   
-    #     naming = facilityList[i].replace(' ','')
             
+    
     
     ###############################################################################
     #### tbd
@@ -119,10 +94,7 @@ def fetchData():
 
 dfall = fetchData()[1]
 dfit = fetchData()[0]    
-  
 
-
-#for i in range(len(facilityList)):
 def displayTable(df: pd.DataFrame) -> AgGrid:
     i = 0
     
@@ -258,20 +230,33 @@ def displayTable(df: pd.DataFrame) -> AgGrid:
              'children': [
                  {'field': 'growth1920', 'headerName':'19A->20A', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':100,
                   'valueGetter':"""
-if ( 
-isNaN(
-((
-  Number(data.Jan20)+Number(data.Feb20)+Number(data.Mar20)+Number(data.Apr20)+Number(data.May20)+Number(data.Jun20)+Number(data.Jul20)+Number(data.Aug20)+Number(data.Sep20)+Number(data.Oct20)+Number(data.Nov20)+Number(data.Dec20)
-  )/(
-  Number(data.Jan19)+Number(data.Feb19)+Number(data.Mar19)+Number(data.Apr19)+Number(data.May19)+Number(data.Jun19)+Number(data.Jul19)+Number(data.Aug19)+Number(data.Sep19)+Number(data.Oct19)+Number(data.Nov19)+Number(data.Dec19)
-                                                                                                                                                                                                                                        )-1).toFixed(2)
-) 
-) { return ''; } 
-else { return (100*((
-    Number(data.Jan20)+Number(data.Feb20)+Number(data.Mar20)+Number(data.Apr20)+Number(data.May20)+Number(data.Jun20)+Number(data.Jul20)+Number(data.Aug20)+Number(data.Sep20)+Number(data.Oct20)+Number(data.Nov20)+Number(data.Dec20)
+if (
+isNaN(((
+  Number(data.Jan20)+Number(data.Feb20)+Number(data.Mar20)+
+  Number(data.Apr20)+Number(data.May20)+Number(data.Jun20)+
+  Number(data.Jul20)+Number(data.Aug20)+Number(data.Sep20)+
+  Number(data.Oct20)+Number(data.Nov20)+Number(data.Dec20)
+ )
+ /
+ (
+  Number(data.Jan19)+Number(data.Feb19)+Number(data.Mar19)+
+  Number(data.Apr19)+Number(data.May19)+Number(data.Jun19)+
+  Number(data.Jul19)+Number(data.Aug19)+Number(data.Sep19)+
+  Number(data.Oct19)+Number(data.Nov19)+Number(data.Dec19)
+ )-1).toFixed(1)
+)) { return ''; } 
+else { return 
+(100*((
+    Number(data.Jan20)+Number(data.Feb20)+Number(data.Mar20)+
+    Number(data.Apr20)+Number(data.May20)+Number(data.Jun20)+
+    Number(data.Jul20)+Number(data.Aug20)+Number(data.Sep20)+
+    Number(data.Oct20)+Number(data.Nov20)+Number(data.Dec20)
     )/(
-       Number(data.Jan19)+Number(data.Feb19)+Number(data.Mar19)+Number(data.Apr19)+Number(data.May19)+Number(data.Jun19)+Number(data.Jul19)+Number(data.Aug19)+Number(data.Sep19)+Number(data.Oct19)+Number(data.Nov19)+Number(data.Dec19)
-)-1)).toFixed(1)+'%';}""" },
+    Number(data.Jan19)+Number(data.Feb19)+Number(data.Mar19)+
+    Number(data.Apr19)+Number(data.May19)+Number(data.Jun19)+
+    Number(data.Jul19)+Number(data.Aug19)+Number(data.Sep19)+
+    Number(data.Oct19)+Number(data.Nov19)+Number(data.Dec19)
+    )-1)).toFixed(1)+'%';}""" },
                  {'field': 'growth2021', 'headerName':'20A->21A',  'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':100,
                  'valueGetter':"""
 if ( 
@@ -382,11 +367,8 @@ del dfall['SortInt']
 del dfall['HistoricalVolumeFlag']
 del dfall['ExamCategory']
 
-
 def f(dat, c='lightblue'):
     return [f'background-color: {c}' for i in dat]
-
-#dfall.style.apply(f, axis=0, subset=['Jan19'])
 
 #import xlsxwriter
 from io import BytesIO
@@ -401,13 +383,10 @@ def convert_df():
         dfall[dfall['FacilityName']==XLfacilityList[i]].style.apply(f, axis=0, subset=lockedMonths).to_excel(writer,
                                                                  sheet_name=XLfacilityList[i],
                                                                  index=False)
-        # dlBallantyne.to_excel(writer, sheet_name='Ballantyne', index=False)
-        # dlBlakeney.to_excel(writer, sheet_name='Blakeney', index=False)
     writer.save()
     return output.getvalue() 
 
-        
-    
+           
 #### Populating the various bottom sections
 col1, col2, col3, col4 = st.columns([1,1,1,1])
 with col1:
@@ -417,14 +396,6 @@ with col1:
         file_name="Vein2023Budget_export.xlsx",
         mime="application/vnd.ms-excel"
     )
-#with col2:
-#    st.markdown('Jan19-Aug22: Actuals')
-#    st.markdown('Sep22-Dec22: Forecast')
-#    st.markdown('Jan23-Dec23: Budget')
-
-    
-    
-    
     
     
     
