@@ -132,8 +132,8 @@ def displayTable(df: pd.DataFrame) -> AgGrid:
                  {'field': 'Dec19', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':75, 'cellStyle':{'background-color':'lightblue'}},
                  {'field': 'Total19', 'headerName':'Total', 'columnGroupShow':'closed', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':100, 'cellStyle':{'background-color':'cadetblue'}, 
                       'valueGetter':'Number(data.Jan19)+Number(data.Feb19)+Number(data.Mar19)+Number(data.Apr19)+Number(data.May19)+Number(data.Jun19)+Number(data.Jul19)+Number(data.Aug19)+Number(data.Sep19)+Number(data.Oct19)+Number(data.Nov19)+Number(data.Dec19)',
-                      'cellRenderer':'agAnimateShowChangeCellRenderer',},
-                      'valueFormatter':'Number(data.Total19).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")'
+                      'cellRenderer':'agAnimateShowChangeCellRenderer',
+                      'valueFormatter':'Number(data.Total19).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")',},
                  ],
         },
         
