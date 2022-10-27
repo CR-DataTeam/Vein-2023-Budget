@@ -146,7 +146,7 @@ def displayTable(df: pd.DataFrame) -> AgGrid:
              'field': 'group2019',
              'openByDefault':False,
              'children': [
-                 {'field': 'Jan19', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':75, 'cellStyle':{'background-color':'lightblue'}},
+                 {'field': 'Jan19', 'valueFormatter':'data.Jan19.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':75, 'cellStyle':{'background-color':'lightblue'}},
                  {'field': 'Feb19', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':75, 'cellStyle':{'background-color':'lightblue'}},
                  {'field': 'Mar19', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':75, 'cellStyle':{'background-color':'lightblue'}},
                  {'field': 'Apr19', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':75, 'cellStyle':{'background-color':'lightblue'}},
@@ -355,7 +355,8 @@ else { return (100*((
         'suppressMenu': True,
     },
     
-    "onCellValueChanged":"--x_x--0_0-- function(e) { let api = e.api; let rowIndex = e.rowIndex; let col = e.column.colId; let rowNode = api.getDisplayedRowAtIndex(rowIndex); api.flashCells({ rowNodes: [rowNode], columns: [col], flashDelay: 10000000000 }); }; --x_x--0_0--"
+    "onCellValueChanged":"--x_x--0_0-- function(e) { let api = e.api; let rowIndex = e.rowIndex; let col = e.column.colId; let rowNode = api.getDisplayedRowAtIndex(rowIndex); api.flashCells({ rowNodes: [rowNode], columns: [col], flashDelay: 10000000000 }); }; --x_x--0_0--",
+    "valueFormatter":"--x_x--0_0-- function(e) { let api = e.api; let rowIndex = e.rowIndex; let col = e.column.colId; let rowNode = api.getDisplayedRowAtIndex(rowIndex); api.flashCells({ rowNodes: [rowNode], columns: [col], flashDelay: 10000000000 }); }; --x_x--0_0--"
     }
     
     naming = facilityList[i].replace(' ','')
