@@ -70,7 +70,7 @@ def generatePage(facility_name, facility_startrow, facility_endrow):
             data_return_mode=DataReturnMode.AS_INPUT,
             update_mode=GridUpdateMode.VALUE_CHANGED|GridUpdateMode.FILTERING_CHANGED,
             fit_columns_on_grid_load=True,
-            theme='light', 
+            theme='streamlit', 
             height=525, 
             allow_unsafe_jscode=True,
             enable_enterprise_modules=True,
@@ -116,6 +116,9 @@ def generatePage(facility_name, facility_startrow, facility_endrow):
         latestAuditDateText = 'Latest Audit Date:    ' + str(latestAuditDate)
         st.markdown(f'{latestAuditUserText}')
         st.markdown(f'{latestAuditDateText}')
+    with col2:
+        st.markdown("")
+        st.markdown("There's currently a bug in the underlying hosting company's software that the developers are working to resolve. To see the table, please minimize/unminimize the sidebar (by clicking the [X]).")
     #with col2:
     #    st.markdown('Jan19-Aug22: Actuals')
     #    st.markdown('Sep22-Dec22: Forecast')

@@ -351,7 +351,7 @@ else { return (100*((
         data_return_mode=DataReturnMode.AS_INPUT,
         update_mode=GridUpdateMode.VALUE_CHANGED|GridUpdateMode.FILTERING_CHANGED,
         fit_columns_on_grid_load=True,
-        theme='light', 
+        theme='streamlit', 
         height=525, 
         allow_unsafe_jscode=True,
         enable_enterprise_modules=True,
@@ -383,7 +383,7 @@ def convert_df():
         dfall[dfall['FacilityName']==XLfacilityList[i]].style.apply(f, axis=0, subset=lockedMonths).to_excel(writer,
                                                                  sheet_name=XLfacilityList[i],
                                                                  index=False)
-    writer.save()
+    writer.close()
     return output.getvalue() 
 
            
@@ -396,6 +396,9 @@ with col1:
         file_name="Vein2023Budget_export.xlsx",
         mime="application/vnd.ms-excel"
     )
+with col2:
+    st.markdown("")
+    st.markdown("There's currently a bug in the underlying hosting company's software that the developers are working to resolve. To see the table, please minimize/unminimize the sidebar (by clicking the [X]).")
     
     
     
