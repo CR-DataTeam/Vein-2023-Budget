@@ -52,8 +52,8 @@ col21=colSortList[24:36]
 col22=colSortList[36:48]
 col23=colSortList[48:60]
 
-editableMonths = colSortList[52:60]
-lockedMonths   = colSortList[0:52]
+editableMonths = colSortList[54:60]
+lockedMonths   = colSortList[0:54]
 facilityList=[FACNAME]
 
 creds = service_account.Credentials.from_service_account_file(
@@ -182,7 +182,7 @@ def displayTable(df: pd.DataFrame) -> AgGrid:
         
         {   'headerName': '2022',
              'field': 'group2022',
-             'openByDefault':True,
+             'openByDefault':False,
              'children': [
                  {'field': 'Jan22', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':75, 'cellStyle':{'background-color':'lightblue'}},
                  {'field': 'Feb22', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':75, 'cellStyle':{'background-color':'lightblue'}},
@@ -210,8 +210,8 @@ def displayTable(df: pd.DataFrame) -> AgGrid:
                  {'field': 'Feb23', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':75, 'cellStyle':{'background-color':'lightblue'}},
                  {'field': 'Mar23', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':75, 'cellStyle':{'background-color':'lightblue'}},
                  {'field': 'Apr23', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':75, 'cellStyle':{'background-color':'lightblue'}},
-                 {'field': 'May23', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':75},
-                 {'field': 'Jun23', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':75},
+                 {'field': 'May23', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':75, 'cellStyle':{'background-color':'lightblue'}},
+                 {'field': 'Jun23', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':75, 'cellStyle':{'background-color':'lightblue'}},
                  {'field': 'Jul23', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':75},
                  {'field': 'Aug23', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':75},
                  {'field': 'Sep23', 'columnGroupShow':'open', 'editable':False, 'resizable':False, 'suppressSizeToFit':True, 'suppressAutoSize':True, 'filter':False, 'width':75},
